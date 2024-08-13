@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.sqlite"
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+}
+
+
+
+
+model ProductCollection {
+  id          String    @id @default(uuid()) // Unique ID for the collection
+  title       String                               // Title of the collection
+  products    Product[] @relation("ProductCollectionProducts") // One-to-many relation with Product
+  createdAt   DateTime  @default(now())            // Timestamp when the collection is created
+  updatedAt   DateTime  @updatedAt                 // Timestamp when the collection is last updated
+
+  @@map("collections") // Optional: You can map the model to the table "collections"
+}
+
+model Product {
+  id                    String           @id @default(uuid()) // Unique ID for the product
+  title                 String                                // Title of the product
+  handle                String                                // Handle/slug of the product
+  descriptionHtml       String                                // HTML description of the product
+  publishedAt           DateTime?                             // Timestamp for when the product was published
+  variants              Variant[]                             // One-to-many relation with Variant
+  images                Image[]                               // One-to-many relation with Image
+  collectionId          String?                               // Foreign key referencing ProductCollection
+  productCollection     ProductCollection? @relation("ProductCollectionProducts", fields: [collectionId], references: [id]) // Many-to-one relation with ProductCollection
+  tags                  ProductTags[]                         // Many-to-many relation with Tag through ProductTags
+
+  @@index([collectionId]) // Index on the foreign key for performance
+  @@map("products")       // Optional: You can map the model to the table "products"
+}
+
+model Variant {
+  id              String   @id @default(uuid()) // Unique ID for the variant
+  title           String                                // Title of the variant
+  sku             String?                               // SKU of the variant (nullable)
+  availableForSale Boolean                             // Whether the variant is available for sale
+  productId       String                                // Foreign key referencing Product
+  product         Product  @relation(fields: [productId], references: [id]) // Many-to-one relation with Product
+
+  @@index([productId]) // Index on the foreign key for performance
+  @@map("variants")    // Optional: You can map the model to the table "variants"
+}
+
+model Image {
+  id        String   @id @default(uuid()) // Unique ID for the image
+  url       String                                // URL of the image
+  altText   String?                               // Alternative text for the image (nullable)
+  productId String                                // Foreign key referencing Product
+  product   Product  @relation(fields: [productId], references: [id]) // Many-to-one relation with Product
+
+  @@index([productId]) // Index on the foreign key for performance
+  @@map("images")      // Optional: You can map the model to the table "images"
+}
+
+model Tag {
+  id        String   @id @default(uuid()) // Unique ID for the tag
+  name      String   @unique              // Name of the tag
+  products  ProductTags[]                 // Many-to-many relation with Product through ProductTags
+
+  @@map("tags") // Optional: You can map the model to the table "tags"
+}
+
+model ProductTags {
+  productId String
+  tagId     String
+
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([productId, tagId])
+  @@map("product_tags")
+}
+
