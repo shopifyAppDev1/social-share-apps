@@ -6,8 +6,7 @@
     {
       "type": "product",
       "id": "product",
-      "label": "Product",
-      "autofill": true
+      "label": "Product"
     },
     {
       "type": "text",
@@ -19,14 +18,16 @@
 }
 {% endschema %}
 
+
+
 <div id="share-modal" class="share-modal">
   <div class="share-modal-content">
-    <span class="close-modal">&times;</span>
-    <h2>{{ section.settings.product.title }}</h2>
-    <img src="{{ section.settings.product.featured_image | img_url: 'medium' }}" alt="{{ section.settings.product.title }}" class="modal-product-image">
-    <p>{{ section.settings.discount_message }}</p>
+    <span class="close-modal">&times;</span> <!-- Close button -->
+    <h2>{{ section.settings.product.title }}</h2> <!-- Product title -->
+    <img src="{{ section.settings.product.featured_image | image_url: 'medium' }}" alt="{{ section.settings.product.title }}" width='600' height='600' class="modal-product-image"> <!-- Product image -->
+    <p>{{ section.settings.discount_message }}</p> <!-- Discount message -->
     <div class="social-share-buttons">
-      <!-- Example social share buttons -->
+      <!-- Social share buttons -->
       <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url }}{{ section.settings.product.url }}" class="share-facebook" target="_blank">Share on Facebook</a>
       <a href="https://twitter.com/intent/tweet?url={{ shop.url }}{{ section.settings.product.url }}&text=Check%20out%20this%20product!" class="share-twitter" target="_blank">Share on Twitter</a>
     </div>
@@ -34,106 +35,87 @@
 </div>
 
 <style>
-/* Styling for the modal background */
-.share-modal {
-  position: fixed;
-  left: 0;
+/* Modal background */
+.share-modal{
+  position: absolute;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
-  display: flex;
+  background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+  display: none; /* Hidden by default */
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.share-modal.show {
-  opacity: 1;
+  z-index: 9999 !important; 
 }
 
-/* Styling for the modal content */
+.share-modal.show {
+  display: flex; /* Flexbox centering */
+}
+
+/* Modal content */
 .share-modal-content {
-  background: #ffffff; /* White background for the modal */
+  background: #ffffff; /* White background */
   padding: 20px;
   border-radius: 12px;
+  max-width: 500px;
   width: 90%;
-  max-width: 600px;
   text-align: center;
-  position: relative;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  position: relative; /* Ensure close button stays in place */
 }
 
 .close-modal {
   position: absolute;
   top: 10px;
   right: 10px;
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 24px;
   color: #333;
   cursor: pointer;
-  transition: color 0.3s ease;
-}
-.close-modal:hover {
-  color: #ff0000; /* Color change on hover for better UX */
 }
 
 .modal-product-image {
-  max-width: 100%;
+  width: 100%;
   height: auto;
-  border-radius: 8px;
   margin-bottom: 20px;
-}
-
-.social-share-buttons {
-  margin-top: 20px;
+  border-radius: 8px;
 }
 
 .social-share-buttons a {
   display: inline-block;
   margin: 10px;
   padding: 12px 24px;
-  color: #ffffff;
+  color: #fff;
   background: #007bff;
   text-decoration: none;
   border-radius: 8px;
   font-weight: bold;
   transition: background 0.3s ease, transform 0.3s ease;
 }
-.social-share-buttons a.share-facebook {
-  background: #3b5998;
-}
-.social-share-buttons a.share-twitter {
-  background: #1da1f2;
-}
-.social-share-buttons a:hover {
-  background: #0056b3; /* Darker color on hover */
-  transform: scale(1.05); /* Slight zoom effect on hover */
-}
+
 </style>
 
+
 <script>
-// JavaScript to handle modal display
-document.addEventListener('DOMContentLoaded', function () {
-  var modal = document.getElementById('share-modal');
-  var closeModal = document.querySelector('.close-modal');
+      document.addEventListener('DOMContentLoaded', function () {
+      var modal = document.getElementById('share-modal');
+      var closeModal = document.querySelector('.close-modal');
 
-  // Show the modal 4 seconds after the page loads
-  setTimeout(function() {
-    modal.classList.add('show');
-  }, 4000); // 4000 milliseconds = 4 seconds
+      // Show the modal after 4 seconds
+      setTimeout(function() {
+        modal.classList.add('show-social');
+      }, 1000);
 
-  // Close the modal when clicking the close button
-  closeModal.onclick = function() {
-    modal.classList.remove('show');
-  };
+    // Close the modal when the close button is clicked
+    closeModal.onclick = function() {
+      modal.classList.remove('show-social');
+    };
 
-  // Close the modal when clicking outside the modal content
-  window.onclick = function(event) {
-    if (event.target === modal) {
-      modal.classList.remove('show');
-    }
-  };
-});
+    // Close the modal when clicking outside the modal content
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.classList.remove('show-social');
+      }
+    };
+  });
 </script>

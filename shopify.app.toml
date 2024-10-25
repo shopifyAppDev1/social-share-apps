@@ -3,7 +3,7 @@
 client_id = "71e9f8521247e8bb5526363e25b9960d"
 name = "genarete-qrCode-app"
 handle = "genarete-qrcode-app"
-application_url = "https://discover-spears-checkout-chain.trycloudflare.com"
+application_url = "https://scholarships-breaks-royal-private.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_product_listings,read_products,write_products"
 
 [auth]
 redirect_urls = [
-  "https://discover-spears-checkout-chain.trycloudflare.com/auth/callback",
-  "https://discover-spears-checkout-chain.trycloudflare.com/auth/shopify/callback",
-  "https://discover-spears-checkout-chain.trycloudflare.com/api/auth/callback"
+  "https://scholarships-breaks-royal-private.trycloudflare.com/auth/callback",
+  "https://scholarships-breaks-royal-private.trycloudflare.com/auth/shopify/callback",
+  "https://scholarships-breaks-royal-private.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
